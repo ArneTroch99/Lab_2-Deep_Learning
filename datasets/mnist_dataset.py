@@ -44,4 +44,4 @@ class MNISTDataset:
             plt.title("Ground Truth: {}".format(example_targets[i]))
             plt.xticks([])
             plt.yticks([])
-        fig.show()
+        plt.show()

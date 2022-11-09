@@ -49,4 +49,4 @@ class HousesDataset(Dataset):
         plt.xlabel("size [m^2]")
         plt.ylabel("Price [€]")
 
-        fig.show()
+        plt.show()

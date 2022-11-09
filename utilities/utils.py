@@ -28,7 +28,7 @@ def plot_rgb_tensor(to_plot: torch.Tensor, title: str):
     fig = plt.figure()
     plt.title(title)
     plt.imshow(transforms.ToPILImage()(to_plot), interpolation="None")
-    fig.show()
+    plt.show()
 
 
 def train_lin_model(model: LinearRegression, optimizer: torch.optim.Optimizer,
@@ -93,7 +93,7 @@ def test_lin_reg_plot(model: LinearRegression, test_data: DataLoader, options: L
     plt.legend(["Unknown function f(x)", "Linear regression line", "Real data samples", "Estimated data samples"])
     plt.plot()
 
-    fig.show()
+    plt.show()
 
 
 def train_classification_model(model: Classifier, optimizer: torch.optim.Optimizer,
@@ -158,7 +158,7 @@ def classify_images(model: Classifier, dataset: MNISTDataset, options: Classific
             plt.title(f"y: {y[i]}, estimation: {predicted[i].item()}")
             plt.xticks([])
             plt.yticks([])
-        fig.show()
+        plt.show()
 
 
 def not_implemented() -> str:
