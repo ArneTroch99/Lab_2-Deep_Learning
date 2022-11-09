@@ -14,6 +14,7 @@ if __name__ == "__main__":
 
     # create a Classifier instance named model
     model = Classifier(options)
+    model.to(options.device)
 
     # load the model
     utils.load(model, options)

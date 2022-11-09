@@ -18,12 +18,12 @@ def lin_layer_forward(weights: torch.Tensor, random_image: torch.Tensor) -> torc
 
 
 def tensor_network():
-    target = torch.FloatTensor([0.5], device=options.device)
+    target = torch.FloatTensor([0.5]).to(options.device)
     print(f"The target is: {target.item():.2f}")
     plot_tensor(target, "Target")
 
-    input_tensor = torch.FloatTensor([0.4, 0.8, 0.5, 0.3], device=options.device)
-    weights = torch.FloatTensor([0.1, -0.5, 0.9, -1], device=options.device)
+    input_tensor = torch.FloatTensor([0.4, 0.8, 0.5, 0.3]).to(options.device)
+    weights = torch.FloatTensor([0.1, -0.5, 0.9, -1]).to(options.device)
     """START TODO:  ensure that the tensor 'weights' saves the computational graph and the gradients after backprop"""
 
     """END TODO"""
@@ -31,7 +31,7 @@ def tensor_network():
     # remember the activation a of a unit is calculated as follows:
     #      T
     # a = W * x, with W the weights and x the inputs of that unit
-    output = lin_layer_forward(weights, input_tensor)
+    output = lin_layer_forward(weights, input_tensor).to(options.device)
     print(f"Output value: {output.item(): .2f}")
     plot_tensor(output.detach(), "Initial Output")
 

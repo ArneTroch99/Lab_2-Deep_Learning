@@ -17,7 +17,7 @@ from options.options import Options
 
 def plot_tensor(to_plot: torch.Tensor, title: str):
     gray_image_tensor = to_plot.view([1, -1, 1])
-    numpy_im = gray_image_tensor.numpy()
+    numpy_im = gray_image_tensor.cpu().numpy()
     plt.imshow(numpy_im, cmap=plt.get_cmap("GnBu"), interpolation="none", vmin=0,
                vmax=1)
     plt.title(title)
@@ -77,15 +77,15 @@ def test_lin_reg_plot(model: LinearRegression, test_data: DataLoader, options: L
     # plot real and estimated data points
     with torch.no_grad():
         for data in test_data:
-            plt.scatter(data[:, 0], data[:, 1], c="g")
+            plt.scatter(data.cpu()[:, 0], data.cpu()[:, 1], c="g")
             size, price = data[:, 0].unsqueeze(1), data[:, 1].unsqueeze(1)
             estimated_price = model(size)
-            plt.scatter(data[:, 0], estimated_price, c="r")
+            plt.scatter(data.cpu()[:, 0], estimated_price.cpu(), c="r")
 
         # plot line
-        x = torch.linspace(options.min_house_size, options.max_house_size, 50000, device=options.device)
+        x = torch.linspace(options.min_house_size, options.max_house_size, 50000, device="cpu")
         plt.plot(x.numpy(), 5000 * x + 100000, "g")
-        plt.plot(x.numpy(), model(x.unsqueeze(1)).numpy(), "r")
+        plt.plot(x.numpy(), model(x.unsqueeze(1).to(options.device)).cpu().numpy(), "r")
 
     plt.title("Data")
     plt.xlabel("size [m^2]")
@@ -104,6 +104,7 @@ def train_classification_model(model: Classifier, optimizer: torch.optim.Optimiz
     for epoch in range(options.num_epochs):
         running_loss = 0
         for x, y in dataset.train_loader:
+            y = y.to(options.device)
             """START TODO: fill in the gaps as mentioned by the comments"""
             # forward the data x through the model.
             # Note: x does not have the correct shape,
@@ -136,7 +137,7 @@ def test_classification_model(model: Classifier, dataset: MNISTDataset, options:
             # choose the number with the highest probability as prediction
             _, predicted = torch.max(output, dim=1)
             tot += y.size(0)
-            correct += (predicted == y).sum().item()
+            correct += (predicted == y.to(predicted.device)).sum().item()
         print(f'Accuracy: {100 * correct / tot :.2f}%')
 
 
